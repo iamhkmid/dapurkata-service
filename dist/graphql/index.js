@@ -11,6 +11,7 @@ const context_1 = __importDefault(require("./context"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const nodeCache_1 = __importDefault(require("./services/nodeCache"));
 const pubsub_1 = __importDefault(require("./services/pubsub"));
+const __1 = require("..");
 const graphql = async ({ app, httpServer }) => {
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: schema_1.default,
@@ -28,7 +29,7 @@ const graphql = async ({ app, httpServer }) => {
         ],
     });
     await apolloServer.start();
-    apolloServer.applyMiddleware({ app, cors: false });
+    apolloServer.applyMiddleware({ app, cors: __1.corsOptions });
     const subscriptionServer = subscriptions_transport_ws_1.SubscriptionServer.create({
         schema: schema_1.default,
         execute: graphql_1.execute,

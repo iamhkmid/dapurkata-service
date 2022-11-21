@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.corsOptions = void 0;
 const express_1 = __importDefault(require("express"));
 const http = __importStar(require("http"));
 const cors_1 = __importDefault(require("cors"));
@@ -40,7 +41,7 @@ const express_useragent_1 = __importDefault(require("express-useragent"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const PORT = parseInt(process.env.PORT || "3001");
 const dev = process.env.NODE_ENV !== "production";
-const corsOptions = { credentials: true, origin: process.env.CLIENT_URL };
+exports.corsOptions = { credentials: true, origin: "*" };
 const gqlUploadOptions = { maxFileSize: 10000000, maxFiles: 3 };
 const apiRequestLimiter = (0, express_rate_limit_1.default)({
     windowMs: 1000,
@@ -65,7 +66,7 @@ const main = async () => {
     // app.use("/_next", express.static(path.join(__dirname, "../.next")));
     app.use((0, cookie_parser_1.default)());
     app.use(express_1.default.json());
-    app.use((0, cors_1.default)(corsOptions));
+    app.use((0, cors_1.default)(exports.corsOptions));
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use(express_useragent_1.default.express());
     app.use(apiRequestLimiter);
