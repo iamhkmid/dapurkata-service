@@ -61,7 +61,7 @@ export const Mutation: TBookMutation = {
     await validateSchema({ type: "CREATE_BOOK", data });
     const folderName = changeStr(`${new Date().getTime()}`);
     const { pictureDir } = await makeDirFile({
-      dirLoc: `/server/static/uploads/books/${folderName}/`,
+      dirLoc: `/static/uploads/books/${folderName}/`,
     });
     const author = await db.author.findUnique({
       where: { id: data.authorId },

@@ -4,7 +4,7 @@ import path from "path";
 
 const checkFile = (req: Request, res: Response, next: NextFunction) => {
   fs.access(
-    path.join(process.cwd(), `/server/static/uploads${req.path}`),
+    path.join(process.cwd(), `/static/uploads${req.path}`),
     fs.constants.R_OK,
     (error) => {
       if (error) {

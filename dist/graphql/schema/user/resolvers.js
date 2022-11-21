@@ -49,7 +49,7 @@ exports.Mutation = {
             throw new apollo_server_errors_1.ValidationError(check + " already exists");
         const { username, email, password, role, phone, firstName, lastName } = data;
         const { pictureDir } = await (0, uploadFIle_1.makeDirFile)({
-            dirLoc: "/server/static/uploads/profile",
+            dirLoc: "/static/uploads/profile",
         });
         const profilePicInfo = userPic &&
             (await (0, utils_1.saveUserPic)({ pictureDir, userPic }).catch((err) => {
@@ -156,9 +156,9 @@ exports.Mutation = {
             select: { id: true, username: true, pictureDir: true, userPicture: true },
         });
         const { pictureDir } = await (0, uploadFIle_1.makeDirFile)({
-            dirLoc: `/server/static/uploads/profile/${findUser.username}/`,
+            dirLoc: `/static/uploads/profile/${findUser.username}/`,
         });
-        const filePath = path_1.default.join(process.cwd(), `/server/static/${findUser.userPicture}`);
+        const filePath = path_1.default.join(process.cwd(), `/static/${findUser.userPicture}`);
         try {
             fs_1.default.unlinkSync(filePath);
         }
@@ -178,7 +178,7 @@ exports.Mutation = {
             where: { id: user.id },
             select: { id: true, pictureDir: true, userPicture: true },
         });
-        const filePath = path_1.default.join(process.cwd(), `/server/static/${findUser.userPicture}`);
+        const filePath = path_1.default.join(process.cwd(), `/static/${findUser.userPicture}`);
         fs_1.default.unlink(filePath, async (err) => {
             if (err && err.code == "ENOENT") {
                 // file not found

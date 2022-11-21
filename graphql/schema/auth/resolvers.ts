@@ -85,7 +85,7 @@ export const Mutation: TAuthMutation = {
     }
     if (!user) {
       const { pictureDir } = await makeDirFile({
-        dirLoc: "/server/static/uploads/profile",
+        dirLoc: "/static/uploads/profile",
       });
       user = await db.user.create({
         data: {
@@ -115,7 +115,7 @@ export const Mutation: TAuthMutation = {
 
     const { username, email, password, phone, firstName, lastName } = data;
     const { pictureDir } = await makeDirFile({
-      dirLoc: "/server/static/uploads/profile",
+      dirLoc: "/static/uploads/profile",
     });
     const profilePicInfo =
       userPic &&

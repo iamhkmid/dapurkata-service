@@ -70,7 +70,7 @@ const main = async () => {
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use(express_useragent_1.default.express());
     app.use(apiRequestLimiter);
-    app.use("/uploads", express_1.default.static(path_1.default.join(process.cwd(), "/server/static/uploads"), {
+    app.use("/uploads", express_1.default.static(path_1.default.join(process.cwd(), "/static/uploads"), {
         fallthrough: true,
         index: false,
         redirect: false,

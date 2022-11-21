@@ -50,7 +50,7 @@ const main = async () => {
 
   app.use(
     "/uploads",
-    express.static(path.join(process.cwd(), "/server/static/uploads"), {
+    express.static(path.join(process.cwd(), "/static/uploads"), {
       fallthrough: true,
       index: false,
       redirect: false,

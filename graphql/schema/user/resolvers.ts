@@ -44,7 +44,7 @@ export const Mutation: TUserMutation = {
     const { username, email, password, role, phone, firstName, lastName } =
       data;
     const { pictureDir } = await makeDirFile({
-      dirLoc: "/server/static/uploads/profile",
+      dirLoc: "/static/uploads/profile",
     });
     const profilePicInfo =
       userPic &&
@@ -150,11 +150,11 @@ export const Mutation: TUserMutation = {
       select: { id: true, username: true, pictureDir: true, userPicture: true },
     });
     const { pictureDir } = await makeDirFile({
-      dirLoc: `/server/static/uploads/profile/${findUser.username}/`,
+      dirLoc: `/static/uploads/profile/${findUser.username}/`,
     });
     const filePath = path.join(
       process.cwd(),
-      `/server/static/${findUser.userPicture}`
+      `/static/${findUser.userPicture}`
     );
     try {
       fs.unlinkSync(filePath);
@@ -177,7 +177,7 @@ export const Mutation: TUserMutation = {
     });
     const filePath = path.join(
       process.cwd(),
-      `/server/static/${findUser.userPicture}`
+      `/static/${findUser.userPicture}`
     );
     fs.unlink(filePath, async (err) => {
       if (err && err.code == "ENOENT") {

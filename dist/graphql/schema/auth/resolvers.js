@@ -74,7 +74,7 @@ exports.Mutation = {
         }
         if (!user) {
             const { pictureDir } = await (0, uploadFIle_1.makeDirFile)({
-                dirLoc: "/server/static/uploads/profile",
+                dirLoc: "/static/uploads/profile",
             });
             user = await db.user.create({
                 data: {
@@ -104,7 +104,7 @@ exports.Mutation = {
             throw new apollo_server_errors_1.ValidationError(check + " already exists");
         const { username, email, password, phone, firstName, lastName } = data;
         const { pictureDir } = await (0, uploadFIle_1.makeDirFile)({
-            dirLoc: "/server/static/uploads/profile",
+            dirLoc: "/static/uploads/profile",
         });
         const profilePicInfo = userPic &&
             (await (0, utils_2.saveUserPic)({ pictureDir, userPic }).catch((err) => {

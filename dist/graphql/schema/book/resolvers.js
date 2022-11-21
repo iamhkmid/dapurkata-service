@@ -56,7 +56,7 @@ exports.Mutation = {
         await (0, validateSchema_1.default)({ type: "CREATE_BOOK", data });
         const folderName = (0, uploadFIle_1.changeStr)(`${new Date().getTime()}`);
         const { pictureDir } = await (0, uploadFIle_1.makeDirFile)({
-            dirLoc: `/server/static/uploads/books/${folderName}/`,
+            dirLoc: `/static/uploads/books/${folderName}/`,
         });
         const author = await db.author.findUnique({
             where: { id: data.authorId },
