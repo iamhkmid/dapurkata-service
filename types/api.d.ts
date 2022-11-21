@@ -1,4 +1,4 @@
-import { TPaymentInfo } from "../../src/types/order";
+type TPaymentInfo = { name: string; value: string };
 import {
   TAPIParamsBTBCA,
   TAPIParamsBTBNI,
@@ -10,7 +10,6 @@ import {
   TAPIResBTBRI,
   TAPIResBTMandiriBill,
   TAPIResBTPermata,
-  TDBBankTransfer,
   TAPIResCSAlfamart,
   TAPIResCSIndomaret,
   TAPIParamsCSIndomaret,
@@ -18,7 +17,7 @@ import {
 } from "./midtrans";
 import { TAPICity, TAPICost, TAPIProvince } from "./rajaOngkir";
 import {
-  TCustomerDetails,
+  TCustomerDetail,
   TItemDetails,
   TPaymentBT,
   TPaymentStore,
@@ -39,7 +38,7 @@ export type TAPIRajaOngkir = {
     province_id?: string;
   }) => Promise<TAPICity>;
   getCost: (
-    args = {
+    args : {
       origin: string,
       destination: string,
       weight: number,
@@ -53,7 +52,7 @@ export type TMidtransProps = {
   value: {
     transaction_details: TTransactionDetails;
     item_details: TItemDetails[];
-    customer_details: TCustomerDetails;
+    customer_details: TCustomerDetail;
   };
 };
 export type TAPIBankTransfer = {
@@ -103,12 +102,12 @@ type TNotifPaymentBody = {
   fraud_status?: string;
   currency: string;
 } & (
-  | {
+    | {
       va_numbers: { va_number: string; bank: string }[];
     }
-  | {
+    | {
       biller_code: string;
       bill_key: string;
     }
-  | { permata_va_number: string }
-);
+    | { permata_va_number: string }
+  );

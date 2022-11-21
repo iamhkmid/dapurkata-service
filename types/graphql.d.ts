@@ -9,12 +9,12 @@ import {
   TGQLRegister,
   TGQLRegisterConfirmation,
   TGQLResendConfirmCode,
+  TGQLResetPassword,
   TGQLSignin,
 } from "./auth";
 import {
   TArgsCreateAuthor,
   TArgsUpdateAuthor,
-  TDBAuthor,
   TGQLAuthor,
 } from "./author";
 import {
@@ -38,15 +38,11 @@ import {
   TGQLArgsProvinces,
   TGQLCourier,
 } from "./courier";
-import { TDB } from "./db";
 import { TGQLBookPic, TGQLUserPic } from "./picture";
 import { TAPICity, TAPICost, TAPIProvince } from "./rajaOngkir";
 import {
   TArgsCreateRcpt,
   TArgsUpdateRcpt,
-  TDBRecipient,
-  TGQLArgsAddRecipient,
-  TGQLArgsEditRecipient,
   TGQLRecipient,
 } from "./recipient";
 import {
@@ -71,7 +67,6 @@ import {
   TArgsChangeRole,
   TArgsCreateUser,
   TArgsUpdateUser,
-  TGQLArgsUser,
   TGQLUser,
   TGQLUserNotification,
   TGQLUserShoppingcartByAdmin,

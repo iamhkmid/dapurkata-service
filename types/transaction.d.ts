@@ -1,6 +1,4 @@
-import { boolean, string } from "yup/lib/locale";
 import { TAPI } from "./api";
-import { TDB } from "./gContext";
 import { TGQLUser } from "./user";
 
 export type TGQLBankTransfer = {
@@ -209,7 +207,7 @@ export type TGQLOrder = {
   ItemDetails?: TGQLItemDetail[];
   PaymentInfo?: TGQLPaymentInfo[];
   CustomerDetail?: TGQLCustomerDetail;
-  CourierService?: TGQLCourierService;
+  CourierService?: any;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -241,7 +239,7 @@ export type TGQLUserOrder = {
   ItemDetails?: TGQLItemDetail[];
   PaymentInfo?: TGQLPaymentInfo[];
   CustomerDetail?: TGQLCustomerDetail;
-  CourierService?: TGQLCourierService;
+  CourierService?: any;
   createdAt: Date;
   updatedAt: Date;
 };

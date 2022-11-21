@@ -13,7 +13,7 @@ import checkFile from "./middleware/checkFile";
 import useragent from "express-useragent";
 import rateLimit from "express-rate-limit";
 
-const PORT = parseInt(process.env.PORT || "3000");
+const PORT = parseInt(process.env.PORT || "3001");
 const dev = process.env.NODE_ENV !== "production";
 const corsOptions = { credentials: true, origin: process.env.CLIENT_URL };
 const gqlUploadOptions = { maxFileSize: 10000000, maxFiles: 3 };

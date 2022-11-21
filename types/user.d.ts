@@ -1,5 +1,3 @@
-import { TGQLUserPic } from "./picture";
-
 export type TUser = {
   firstName: string;
   lastName?: string;

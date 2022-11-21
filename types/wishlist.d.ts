@@ -19,10 +19,6 @@ export type TGQLWishlist = {
 export type TGQLAddWishlist = {
   message: string;
 };
-
-export type TGQLAddWishlist = {
-  message: string;
-};
 export type TGQLDeleteWishlist = {
   message: string;
 };

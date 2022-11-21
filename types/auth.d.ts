@@ -1,6 +1,3 @@
-import { TDBGetUserPic, TGQLUserPic } from "./picture";
-import { TDBSigninUser } from "./user";
-
 export type TGQLArgsSignin = {
   username: string;
   password: string;

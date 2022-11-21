@@ -1,6 +1,3 @@
-import { TDBBook } from "./book";
-import { TDBGetUser } from "./user";
-
 export type TGQLSCart = {
   id: string;
   Book: {
