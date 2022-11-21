@@ -24,7 +24,7 @@ const graphql = async ({ app, httpServer }) => {
     ],
   });
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({ app, cors: true });
 
   const subscriptionServer = SubscriptionServer.create(
     {
