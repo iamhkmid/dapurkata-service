@@ -6,6 +6,7 @@ import context from "./context";
 import jwt from "jsonwebtoken";
 import cache from "./services/nodeCache";
 import pubsub from "./services/pubsub";
+import { corsOptions } from "..";
 
 const graphql = async ({ app, httpServer }) => {
   const apolloServer = new ApolloServer({
@@ -24,7 +25,7 @@ const graphql = async ({ app, httpServer }) => {
     ],
   });
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app, cors: true });
+  apolloServer.applyMiddleware({ app, cors: corsOptions });
 
   const subscriptionServer = SubscriptionServer.create(
     {
