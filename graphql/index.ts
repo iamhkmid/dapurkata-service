@@ -6,7 +6,10 @@ import context from "./context";
 import jwt from "jsonwebtoken";
 import cache from "./services/nodeCache";
 import pubsub from "./services/pubsub";
-import { corsOptions } from "..";
+
+const corsOptions = {
+  origin: ["*", "https://penerbitdapurkata.com", "http:localhost:3000"]
+};
 
 const graphql = async ({ app, httpServer }) => {
   const apolloServer = new ApolloServer({
