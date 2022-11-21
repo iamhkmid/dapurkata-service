@@ -1,0 +1,355 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String         @id @default(cuid()) @map("user_id")
+  firstName    String         @map("first_name")
+  lastName     String?        @map("last_name")
+  username     String         @unique
+  email        String         @unique
+  password     String
+  role         String
+  phone        String?        @unique
+  isActive     Boolean        @map("is_active")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  pictureDir   String         @map("picture_dir")
+  userPicture  String?        @map("user_picture")
+  Recipient    Recipient[]
+  ShoppingCart ShoppingCart[]
+  Order        Order[]
+  Notification Notification[]
+  Wishlist     Wishlist?
+
+  @@map("user")
+}
+
+model Notification {
+  id        String   @id @default(cuid()) @map("notification_id")
+  title     String
+  message   String
+  valueName String?
+  valueId   String?
+  userId    String?
+  User      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notification")
+}
+
+model Recipient {
+  id        String   @id @default(cuid()) @map("recipient_id")
+  firstName String   @map("first_name")
+  lastName  String?  @map("last_name")
+  email     String?
+  phone     String
+  cityId    String?  @map("city_id")
+  // address      String     @db.VarChar(1000)
+  address   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    String   @map("user_id")
+  City      City?    @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("recipient")
+}
+
+model City {
+  id         String      @id @map("city_id")
+  name       String      @map("city_name")
+  postalCode String      @map("postal_Code")
+  provinceId String      @map("province_id")
+  Province   Province    @relation(fields: [provinceId], references: [id], onDelete: Cascade)
+  Recipient  Recipient[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  @@map("city")
+}
+
+model Province {
+  id        String   @id @map("province_id")
+  name      String   @map("province_name")
+  City      City[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("province")
+}
+
+model ShoppingCart {
+  id        String   @id @default(cuid()) @map("shoppingcart_id")
+  userId    String   @map("user_id")
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId    String   @map("book_id")
+  Book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  amount    Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+
+  @@unique([bookId, userId], name: "bookId_userId_unique")
+  @@map("shoppingcart")
+}
+
+model Courier {
+  code          String          @id @default(cuid()) @map("courier_code")
+  name          String
+  isEnabled     Boolean         @map("is_enabled")
+  CourierDetail CourierDetail[]
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  @@map("courier")
+}
+
+model CourierDetail {
+  id          String   @id @default(cuid()) @map("courier_detail_id")
+  service     String
+  description String
+  cost        Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  courierCode String?  @map("courier_code")
+  Courier     Courier? @relation(fields: [courierCode], references: [code], onDelete: SetNull)
+  orderId     String   @unique @map("order_id")
+  Order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("courier_detail")
+}
+
+model PaymentService {
+  id            String       @id @default(cuid()) @map("payment_service_id")
+  name          String
+  isEnabled     Boolean      @map("is_enabled")
+  icon          String
+  description   String
+  // howToPay      String     @db.VarChar(2000)
+  howToPay      String       @map("how_to_pay")
+  Order         Order[]
+  paymentTypeId String?      @map("payment_type_id")
+  PaymentType   PaymentType? @relation(fields: [paymentTypeId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  @@map("payment_service")
+}
+
+model PaymentType {
+  id             String           @id @default(cuid()) @map("payment_type_id")
+  name           String
+  description    String
+  PaymentService PaymentService[]
+  isEnabled      Boolean          @map("is_enabled")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  @@map("payment_type")
+}
+
+model Order {
+  id                String          @id @default(cuid()) @map("order_id")
+  userId            String?         @map("user_id")
+  User              User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  grossAmount       Int             @map("gross_amount")
+  currency          String
+  transactionTime   DateTime        @map("transaction_time")
+  transactionStatus String          @map("transaction_status")
+  shippingStatus    String          @map("shipping_status")
+  receiptNumber     String?         @map("receipt_number")
+  expirationTime    DateTime        @map("expiration_time")
+  fraudStatus       String          @map("fraud_status")
+  ItemDetails       ItemDetail[]
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+  PaymentInfo       PaymentInfo[]
+  CustomerDetail    CustomerDetail?
+  paymentServiceId  String?         @map("payment_service_id")
+  PaymentService    PaymentService? @relation(fields: [paymentServiceId], references: [id], onDelete: SetNull)
+  CourierDetail     CourierDetail?
+
+  @@map("order")
+}
+
+model PaymentInfo {
+  id        String   @id @default(cuid()) @map("payment_info_id")
+  name      String
+  value     String
+  orderId   String   @map("order_id")
+  Order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("payment_info")
+}
+
+model ItemDetail {
+  id        String   @id @default(cuid()) @map("item_detail_id")
+  itemId    String   @map("item_id")
+  price     Int
+  quantity  Int
+  name      String
+  orderId   String   @map("order_id")
+  Order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("item_detail")
+}
+
+model CustomerDetail {
+  id              String           @id @default(cuid()) @map("customer_details_id")
+  firstName       String           @map("first_name")
+  lastName        String?          @map("last_name")
+  email           String
+  phone           String?
+  orderId         String           @unique @map("order_id")
+  Order           Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  ShippingAddress ShippingAddress?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  @@map("customer_detail")
+}
+
+model ShippingAddress {
+  id               String         @id @default(cuid()) @map("shipping_address_id")
+  firstName        String         @map("first_name")
+  lastName         String         @map("last_name")
+  email            String
+  phone            String
+  // address      String     @db.VarChar(1000)
+  address          String
+  city             String
+  postalCode       String         @map("postal_code")
+  countryCode      String         @map("country_code")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  customerDetailId String         @unique @map("customer_detail_id")
+  CustomerDetail   CustomerDetail @relation(fields: [customerDetailId], references: [id], onDelete: Cascade)
+
+  @@map("shipping_address")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid()) @map("wishlist_id")
+  userId    String   @unique @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Book      Book[]
+
+  @@map("wishlist")
+}
+
+model Book {
+  id            String         @id @default(cuid()) @map("book_id")
+  title         String
+  // description      String     @db.VarChar(2000)
+  description   String
+  condition     String
+  coverType     String         @map("cover_type")
+  edition       String?
+  series        String?
+  releaseYear   String         @map("release_year")
+  numberOfPages Int            @map("number_of_pages")
+  length        Float
+  width         Float
+  weight        Int
+  stock         Int
+  price         Int
+  discount      Int            @default(0)
+  isbn          String
+  language      String
+  slug          String         @unique
+  pictureDir    String         @map("picture_dir")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  authorId      String?        @map("author_id")
+  Author        Author?        @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  Category      Category[]
+  BookPicture   BookPicture[]
+  ShoppingCart  ShoppingCart[]
+  publisherId   String?        @map("publisher_id")
+  Publisher     Publisher?     @relation(fields: [publisherId], references: [id], onDelete: SetNull)
+  Wishlist      Wishlist[]
+
+  @@map("book")
+}
+
+model Category {
+  id        String   @id @default(cuid()) @map("category_id")
+  name      String   @unique
+  group     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Book      Book[]
+
+  @@map("category")
+}
+
+model Author {
+  id        String   @id @default(cuid()) @map("author_id")
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Book      Book[]
+
+  @@map("author")
+}
+
+model Publisher {
+  id        String   @id @default(cuid()) @map("publisher_id")
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Book      Book[]
+
+  @@map("publisher")
+}
+
+model BookPicture {
+  id        String   @id @default(cuid()) @map("book_picture_id")
+  url       String
+  type      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  bookId    String   @map("book_id")
+  Book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([type, bookId], name: "type_bookId_unique")
+  @@map("book_picture")
+}
+
+// enum UserRole {
+//   USER
+//   ADMIN
+// }
+
+model FooterInfo {
+  id        String   @id @default(cuid()) @map("footer_info_id")
+  type      String
+  // value      String     @db.VarChar(1000)
+  value     String
+  isEnabled Boolean  @map("is_enabled")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("footer_info")
+}
