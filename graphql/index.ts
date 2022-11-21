@@ -12,7 +12,6 @@ const graphql = async ({ app, httpServer }) => {
   const apolloServer = new ApolloServer({
     schema,
     context,
-    cors: corsOptions,
     plugins: [
       {
         async serverWillStart() {
